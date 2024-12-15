@@ -334,3 +334,5 @@ void loadFile(string &name, int stat_array[3], int &level, int &experience)
 
     File.close();
 }
+
+
