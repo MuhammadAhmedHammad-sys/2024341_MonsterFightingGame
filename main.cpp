@@ -68,7 +68,7 @@ int rng(int min, int max)
 {
     std::srand(std::time(nullptr));
 
-    return int(min + std::rand() % max);
+    return int(min + (std::rand() % (max - min)));
 }
 
 void readToArrays(int stat_array[][3], string name_array[], int &amount, string FileName)
@@ -98,7 +98,8 @@ void readToArrays(int stat_array[][3], string name_array[], int &amount, string 
 void setPlayer(string &name, int stat_array[3])
 {
     cout << "Greetings brave warri'r! what is thy nameth? ";
-    cin >> name;
+    cin.ignore();
+    getline(cin, name);
     cout << "Well hath met " << name << "! This is our land of V'ria, once peaceful and thriving, but now overrun with foul monsters. Though it seems a daunting task, would you be willing to try to rid the land of these beasts? (Y/N)?";
     char play;
     cin >> play;
@@ -158,9 +159,9 @@ void encounter(string player_name, int player_stats[3], string monster_names[], 
     bool player_alive = true;
 
     string monster_name = monster_names[monster_number];
-    int monster_attack = level*monster_stats[monster_number][0]* (100 + rng(0, 10)) / 100;
-    int monster_defense = level*monster_stats[monster_number][1]* (100 + rng(0, 10)) / 100;
-    int monster_hp = level*monster_stats[monster_number][2]* (100 + rng(0, 10)) / 100;
+    int monster_attack = level * monster_stats[monster_number][0] * (100 + rng(0, 10)) / 100;
+    int monster_defense = level * monster_stats[monster_number][1] * (100 + rng(0, 10)) / 100;
+    int monster_hp = level * monster_stats[monster_number][2] * (100 + rng(0, 10)) / 100;
     bool monster_alive = true;
 
     cout << "Look out, " << player_name << ", thee've encount'r'd a " << monster_name << "..." << endl
@@ -270,7 +271,8 @@ void save(string player_name, int player_stats[3], int level, int experience)
         string FileName;
         fstream saveFile;
         cout << "Enter Name for Save File: ";
-        cin >> FileName;
+        cin.ignore();
+        getline(cin, FileName);
         FileName = FileName + ".txt";
         saveFile.open(FileName, ios::out);
         saveFile << player_name << endl
@@ -289,7 +291,8 @@ void loadFile(string &name, int stat_array[3], int &level, int &experience)
     string FileName;
 
     cout << "Enter Name of Save File: ";
-    cin >> FileName;
+    cin.ignore();
+    getline(cin, FileName);
 
     FileName = FileName + ".txt";
 
@@ -318,7 +321,7 @@ void loadFile(string &name, int stat_array[3], int &level, int &experience)
              << "Attack = " << stat_array[1] << endl
              << "Defense = " << stat_array[2] << endl
              << "Level = " << level << endl
-             << "Experience = " << experience <<"/500"<< endl
+             << "Experience = " << experience << "/500" << endl
              << "----------------------------------------------------------------" << endl
              << endl;
     }
@@ -334,5 +337,3 @@ void loadFile(string &name, int stat_array[3], int &level, int &experience)
 
     File.close();
 }
-
-
