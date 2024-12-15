@@ -24,7 +24,7 @@ int main()
     readToArrays(monster_stats, monster_names, monster_amount, MonsterFileName);
 
     string player_name;
-    int player_stats[3] = {10, 10, 100}; // {attack, defense, max health}
+    int player_stats[3] = {100, 100, 1000}; // {attack, defense, max health}
     int level = 1, experience = 0, load;
 
     validIn(load, 0, 1, "Do you want to load a savefile (1 for Yes, 0 for NO)? ");
@@ -158,9 +158,9 @@ void encounter(string player_name, int player_stats[3], string monster_names[], 
     bool player_alive = true;
 
     string monster_name = monster_names[monster_number];
-    int monster_attack = monster_stats[monster_number][0];
-    int monster_defense = monster_stats[monster_number][1];
-    int monster_hp = monster_stats[monster_number][2];
+    int monster_attack = level*monster_stats[monster_number][0]* (100 + rng(0, 10)) / 100;
+    int monster_defense = level*monster_stats[monster_number][1]* (100 + rng(0, 10)) / 100;
+    int monster_hp = level*monster_stats[monster_number][2]* (100 + rng(0, 10)) / 100;
     bool monster_alive = true;
 
     cout << "Look out, " << player_name << ", thee've encount'r'd a " << monster_name << "..." << endl

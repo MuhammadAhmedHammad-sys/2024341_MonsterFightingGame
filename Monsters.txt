@@ -3,22 +3,22 @@ Attack
 Defense
 Max-HP
 Grey Wolf
-10
-10
 100
+100
+1000
 Slime
-9
-9
-120
+90
+90
+1200
 Infernal Lion
-11
-11
-80
-Dragon
-11
-11
 110
+110
+800
+Dragon
+110
+110
+1100
 Frozen Tiger
-11
-9
-100
+110
+90
+1000
