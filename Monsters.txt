@@ -1,0 +1,16 @@
+Name
+Attack
+Defense
+Max-HP
+Grey Wolf
+10
+10
+100
+Slime
+9
+9
+120
+Infernal Lion
+11
+11
+80

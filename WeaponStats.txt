@@ -1,0 +1,16 @@
+Name
+Attack
+Defense
+Max-HP
+Spear
+1
+0
+10
+Sword
+1
+1
+0
+Sheild
+0
+1
+10
