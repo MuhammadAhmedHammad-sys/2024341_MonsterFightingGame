@@ -15,9 +15,9 @@ Infernal Lion
 110
 800
 Dragon
-110
-110
-1100
+105
+105
+1050
 Frozen Tiger
 110
 90

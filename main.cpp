@@ -220,7 +220,7 @@ void encounter(string player_name, int player_stats[3], string monster_names[], 
 
         monster_hp = monster_hp - player_damage;
         cout << "You did " << player_damage << " damage..." << endl
-             << "Moster hp is now " << monster_hp << "..." << endl;
+             << monster_name<<" hp is now " << monster_hp << "..." << endl;
 
         monster_damage = monster_attack * monster_attack / player_defense * (100 + rng(-10, 10)) / 100;
         player_hp = player_hp - monster_damage;
