@@ -53,15 +53,17 @@ int main()
 
 void validIn(int &val, int min, int max, string prompt)
 {
-    bool valid = true;
-    do
-    {
-        if (not valid)
-            cout << "INVALID INPUT... RE-ENTER..." << endl;
-        cout << prompt;
-        cin >> val;
-        valid = val < min || val > max;
-    } while (valid);
+    bool valid;
+    cout << prompt;
+    cin >> val;
+    valid = not(val < min || val > max);
+    if (not valid){
+        cout << "INVALID INPUT... RE-ENTER..." << endl;
+        validIn(val, min, max, prompt);
+    }else{
+        return;
+    }
+        
 }
 
 int rng(int min, int max)
@@ -240,7 +242,7 @@ void encounter(string player_name, int player_stats[3], string monster_names[], 
     }
     else if (not monster_alive)
     {
-        cout << "You won! You get<<" << exp_gain << "experience points for a total of " << experience << "/500..." << endl;
+        cout << "You won! You get " << exp_gain << "experience points for a total of " << experience << "/500..." << endl;
     }
 
     cout << endl
