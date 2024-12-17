@@ -7,6 +7,7 @@ using namespace std;
 
 void validIn(int &val, int min, int max, string prompt);
 int rng(int min, int max);
+bool isNumber(string line);
 
 void readToArrays(int stat_array[][3], string name_array[], int &amount, string FileName);
 void setPlayer(string &name, int stat_array[3]);
@@ -51,19 +52,28 @@ int main()
     return 0;
 }
 
-void validIn(int &val, int min, int max, string prompt)
+void validIn(int &val, int min, int max, string prompt) //only works with values 0 - 9
 {
     bool valid;
+    string line;
+
     cout << prompt;
-    cin >> val;
+    getline(cin, line);
+
+    valid = isNumber(line);
+    if(valid)
+        val = stoi(line);
+
     valid = not(val < min || val > max);
-    if (not valid){
+    if (not valid)
+    {
         cout << "INVALID INPUT... RE-ENTER..." << endl;
         validIn(val, min, max, prompt);
-    }else{
+    }
+    else
+    {
         return;
     }
-        
 }
 
 int rng(int min, int max)
@@ -71,6 +81,17 @@ int rng(int min, int max)
     std::srand(std::time(nullptr));
 
     return int(min + (std::rand() % (max - min)));
+}
+
+bool isNumber(string line){
+    bool isNum = true;
+
+    for(int i = 0; i<size(line)&&isNum; ++i){
+        isNum = line[i] >= '0' && line[i] <= '9';
+    }
+    cout<<isNum<<endl;
+
+    return isNum;
 }
 
 void readToArrays(int stat_array[][3], string name_array[], int &amount, string FileName)
@@ -105,9 +126,14 @@ void setPlayer(string &name, int stat_array[3])
     cout << "Well hath met " << name << "! This is our land of V'ria, once peaceful and thriving, but now overrun with foul monsters. Though it seems a daunting task, would you be willing to try to rid the land of these beasts? (Y/N)?";
     char play;
     cin >> play;
-    if (play == 'N')
+    if (play == 'N' or play == 'n')
     {
-        exit(0);
+        cout << "P- pwease? :_( (Y/N):  ";
+        cin >> play;
+        if (play == 'N' or play == 'n')
+        {
+            exit(0);
+        }
     }
     cout << "Most wondrous! Thee continueth with mine own full faith in thee." << endl
          << "----------------------------------------------------------------" << endl;
@@ -220,7 +246,7 @@ void encounter(string player_name, int player_stats[3], string monster_names[], 
 
         monster_hp = monster_hp - player_damage;
         cout << "You did " << player_damage << " damage..." << endl
-             << monster_name<<" hp is now " << monster_hp << "..." << endl;
+             << monster_name << " hp is now " << monster_hp << "..." << endl;
 
         monster_damage = monster_attack * monster_attack / player_defense * (100 + rng(-10, 10)) / 100;
         player_hp = player_hp - monster_damage;
@@ -254,7 +280,7 @@ void levelup(int &level, int &experience)
 {
     if (experience > 499)
     {
-        level = experience / 500;
+        ++level;
         experience = experience % 500;
     }
 
