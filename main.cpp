@@ -7,15 +7,17 @@ using namespace std;
 
 void validIn(int &val, int min, int max, string prompt);
 int rng(int min, int max);
-bool isNumber(string line);
 
 void readToArrays(int stat_array[][3], string name_array[], int &amount, string FileName);
 void setPlayer(string &name, int stat_array[3]);
 void encounter(string player_name, int player_stats[3], string monster_names[], int monster_stats[][3], int monster_amount, int &level, int &experience);
-void levelup(int &level, int &experience);
-void loadFile(string &name, int stat_array[3], int &level, int &experience);
+void levelup(int &level, int &experience, int player_stats[3]);
+void pause();
 
+void loadFile(string &name, int stat_array[3], int &level, int &experience);
 void save(string player_name, int player_stats[3], int level, int experience);
+
+const int maxExp = 400;
 
 int main()
 {
@@ -38,10 +40,10 @@ int main()
     do
     {
         encounter(player_name, player_stats, monster_names, monster_stats, monster_amount, level, experience);
-        levelup(level, experience);
+        levelup(level, experience, player_stats);
         validIn(playing, 0, 1, "Keep Playing? (1 for Yes, 0 for No): ");
         cout << endl
-             << "----------------------------------------------------------------" << endl
+             << "========================================================================" << endl
              << endl;
     } while (playing);
 
@@ -52,17 +54,12 @@ int main()
     return 0;
 }
 
-void validIn(int &val, int min, int max, string prompt) //only works with values 0 - 9
+void validIn(int &val, int min, int max, string prompt) // only works with values 0 - 9
 {
     bool valid;
-    string line;
 
     cout << prompt;
-    getline(cin, line);
-
-    valid = isNumber(line);
-    if(valid)
-        val = stoi(line);
+    cin >> val;
 
     valid = not(val < min || val > max);
     if (not valid)
@@ -81,17 +78,6 @@ int rng(int min, int max)
     std::srand(std::time(nullptr));
 
     return int(min + (std::rand() % (max - min)));
-}
-
-bool isNumber(string line){
-    bool isNum = true;
-
-    for(int i = 0; i<size(line)&&isNum; ++i){
-        isNum = line[i] >= '0' && line[i] <= '9';
-    }
-    cout<<isNum<<endl;
-
-    return isNum;
 }
 
 void readToArrays(int stat_array[][3], string name_array[], int &amount, string FileName)
@@ -136,7 +122,7 @@ void setPlayer(string &name, int stat_array[3])
         }
     }
     cout << "Most wondrous! Thee continueth with mine own full faith in thee." << endl
-         << "----------------------------------------------------------------" << endl;
+         << "========================================================================" << endl;
 
     int weapons_amount, weapon_stats[32][3];
     string weapon_names[32];
@@ -172,9 +158,14 @@ void setPlayer(string &name, int stat_array[3])
          << "Final Stats:" << endl
          << "Attack = " << stat_array[0] << endl
          << "Defense = " << stat_array[1] << endl
-         << "Max HP = " << stat_array[2] << endl;
+         << "Max HP = " << stat_array[2] << endl
+         << endl;
 
-    cout << "----------------------------------------------------------------" << endl;
+    pause();
+
+    cout << endl
+         << "========================================================================" << endl
+         << endl;
 }
 
 void encounter(string player_name, int player_stats[3], string monster_names[], int monster_stats[][3], int monster_amount, int &level, int &experience)
@@ -207,7 +198,10 @@ void encounter(string player_name, int player_stats[3], string monster_names[], 
     do
     {
         int action;
-        cout << "Available Actions:" << endl
+        cout << "Player hp: " << player_hp << endl
+             << monster_name << " hp: " << monster_hp << endl
+             << endl
+             << "Available Actions:" << endl
              << "Light Attack - less damage but more consistent (Press " << 0 << " to choose)" << endl
              << "Heavy Attack - more damage but less consistent (Press " << 1 << " to choose)" << endl
              << "Rest - attempt to regain lost hp (Press " << 2 << " to choose)" << endl
@@ -258,36 +252,98 @@ void encounter(string player_name, int player_stats[3], string monster_names[], 
         player_alive = player_hp > 0;
         monster_alive = monster_hp > 0;
 
+        cout << endl
+             << "========================================================================" << endl
+             << endl;
+
     } while (player_alive && monster_alive);
 
-    int exp_gain = (100 + rng(-10, 10));
-    experience = experience + exp_gain;
     if (not player_alive)
     {
         cout << "You died! You get 0 experience points" << endl;
     }
     else if (not monster_alive)
     {
-        cout << "You won! You get " << exp_gain << "experience points for a total of " << experience << "/500..." << endl;
+        int exp_gain = (100 + rng(-10, 10));
+        experience = experience + exp_gain;
+        cout << "You won! You get " << exp_gain << " experience points for a total of " << experience << "/" << maxExp << "..." << endl;
     }
 
+    cout << endl;
+    pause;
+
     cout << endl
-         << "----------------------------------------------------------------" << endl
+         << "========================================================================" << endl
          << endl;
 }
 
-void levelup(int &level, int &experience)
+void levelup(int &level, int &experience, int player_stats[3])
 {
-    if (experience > 499)
+    if (experience > maxExp - 1)
     {
         ++level;
-        experience = experience % 500;
+        experience = experience % maxExp;
+
+        if (level % 3 == 0)
+        {
+            int choice;
+
+            cout << "You get an upgrade point! Press..." << endl
+                 << "0 to upgrade attack... " << endl
+                 << "1 to upgrade defense... " << endl
+                 << "2 to upgrade health... " << endl
+                 << "Enter Choice: " << endl;
+
+            cin >> choice;
+
+            switch (choice)
+            {
+            case 0:
+            {
+                cout << "Attack upgraded!" << endl;
+                player_stats[choice] = player_stats[choice] + 10;
+                break;
+            }
+
+            case 1:
+            {
+                cout << "Attack upgraded!" << endl;
+                player_stats[choice] = player_stats[choice] + 10;
+                break;
+            }
+
+            case 2:
+            {
+                cout << "Attack upgraded!" << endl;
+                player_stats[choice] = player_stats[choice] + 100;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+            }
+
+            cout << endl
+                 << "Final Stats:" << endl
+                 << "Attack = " << player_stats[0] << endl
+                 << "Defense = " << player_stats[1] << endl
+                 << "Max HP = " << player_stats[2] << endl
+                 << endl;
+        }
     }
 
-    cout << "Level: " << level << " | Experience: " << experience << "/500" << endl;
+    cout << "Level: " << level << " | Experience: " << experience << "/" << maxExp << endl;
     cout << endl
-         << "----------------------------------------------------------------" << endl
+         << "========================================================================" << endl
          << endl;
+}
+
+void pause()
+{
+    string a;
+    cout << "Enter any value to continue....";
+    cin >> a;
 }
 
 void save(string player_name, int player_stats[3], int level, int experience)
