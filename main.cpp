@@ -13,7 +13,7 @@ void readToArrays(int stat_array[][3], string name_array[], int &amount, string 
 void setPlayer(string &name, int stat_array[3]);
 void encounter(string player_name, int player_stats[3], string monster_names[], int monster_stats[][3], int monster_amount, int &level, int &experience);
 void levelup(int &level, int &experience, int player_stats[3]);
-void displayStats(string title, int player_stats[3] );
+void displayStats(string title, int player_stats[3]);
 
 void loadFile(string &name, int stat_array[3], int &level, int &experience);
 void save(string player_name, int player_stats[3], int level, int experience);
@@ -50,7 +50,7 @@ int main()
 
     save(player_name, player_stats, level, experience);
 
-    cout << "Goodbye!";
+    pause();
 
     return 0;
 }
@@ -130,7 +130,7 @@ void setPlayer(string &name, int player_stats[3])
     string WeaponFileName = "WeaponStats.txt";
     readToArrays(weapon_stats, weapon_names, weapons_amount, WeaponFileName);
 
-    displayStats("H're are thy stats:", player_stats );
+    displayStats("H're are thy stats:", player_stats);
 
     cout << "Thee might not but eke chooseth a weapon; i has't a collection f'r thee:" << endl
          << endl
@@ -152,7 +152,7 @@ void setPlayer(string &name, int player_stats[3])
         player_stats[i] = player_stats[i] + weapon_stats[choice][i];
     }
 
-    displayStats("Final Stats:", player_stats );
+    displayStats("Final Stats:", player_stats);
 
     pause();
 
@@ -214,7 +214,7 @@ void encounter(string player_name, int player_stats[3], string monster_names[], 
         }
         case 1:
         {
-            player_damage = 1.11 * player_attack * player_attack / monster_defense * (100 + rng(-25, 15)) / 100;
+            player_damage = 1.2 * player_attack * player_attack / monster_defense * (100 + rng(-25, 15)) / 100;
             cout << "Heavy Attack Selected..." << endl;
             break;
         }
@@ -317,7 +317,7 @@ void levelup(int &level, int &experience, int player_stats[3])
             }
             }
 
-            displayStats("Final Stats:", player_stats );
+            displayStats("Final Stats:", player_stats);
         }
     }
 
@@ -327,14 +327,14 @@ void levelup(int &level, int &experience, int player_stats[3])
          << endl;
 }
 
-void displayStats(string title, int player_stats[3] )
+void displayStats(string title, int player_stats[3])
 {
     cout << endl
-                 << title << endl
-                 << "Attack = " << player_stats[0] << endl
-                 << "Defense = " << player_stats[1] << endl
-                 << "Max HP = " << player_stats[2] << endl
-                 << endl;
+         << title << endl
+         << "Attack = " << player_stats[0] << endl
+         << "Defense = " << player_stats[1] << endl
+         << "Max HP = " << player_stats[2] << endl
+         << endl;
 }
 
 void pause()
@@ -397,21 +397,19 @@ void loadFile(string &name, int stat_array[3], int &level, int &experience)
         experience = stoi(line);
 
         cout << endl
-             << "Stats:" << endl
-             << "Name = " << name << endl
-             << "Defense = " << stat_array[0] << endl
-             << "Attack = " << stat_array[1] << endl
-             << "Defense = " << stat_array[2] << endl
-             << "Level = " << level << endl
-             << "Experience = " << experience << "/500" << endl
-             << "----------------------------------------------------------------" << endl
+             << "Name = " << name << endl;
+        displayStats("Player Stats:", stat_array);
+        cout << "Level: " << level << endl
+             << "Experience: " << experience << "/" << maxExp << endl
+             << endl
+             << "========================================================================" << endl
              << endl;
     }
     else
     {
         cout << "FILE NOT FOUND" << endl
              << "Starting Basic Setup..." << endl
-             << "----------------------------------------------------------------" << endl
+             << "========================================================================" << endl
              << endl;
 
         setPlayer(name, stat_array);
