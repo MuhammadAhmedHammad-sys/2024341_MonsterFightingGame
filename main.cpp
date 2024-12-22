@@ -7,12 +7,13 @@ using namespace std;
 
 void validIn(int &val, int min, int max, string prompt);
 int rng(int min, int max);
+void pause();
 
 void readToArrays(int stat_array[][3], string name_array[], int &amount, string FileName);
 void setPlayer(string &name, int stat_array[3]);
 void encounter(string player_name, int player_stats[3], string monster_names[], int monster_stats[][3], int monster_amount, int &level, int &experience);
 void levelup(int &level, int &experience, int player_stats[3]);
-void pause();
+void displayStats(string title, int player_stats[3] );
 
 void loadFile(string &name, int stat_array[3], int &level, int &experience);
 void save(string player_name, int player_stats[3], int level, int experience);
@@ -104,7 +105,7 @@ void readToArrays(int stat_array[][3], string name_array[], int &amount, string 
     File.close();
 }
 
-void setPlayer(string &name, int stat_array[3])
+void setPlayer(string &name, int player_stats[3])
 {
     cout << "Greetings brave warri'r! what is thy nameth? ";
     cin.ignore();
@@ -129,12 +130,9 @@ void setPlayer(string &name, int stat_array[3])
     string WeaponFileName = "WeaponStats.txt";
     readToArrays(weapon_stats, weapon_names, weapons_amount, WeaponFileName);
 
-    cout << "H're art thy base stats:" << endl
-         << "Attack = " << stat_array[0] << endl
-         << "Defense = " << stat_array[1] << endl
-         << "Max HP = " << stat_array[2] << endl
-         << endl
-         << "Thee might not but eke chooseth a weapon; i has't a collection f'r thee:" << endl
+    displayStats("H're are thy stats:", player_stats );
+
+    cout << "Thee might not but eke chooseth a weapon; i has't a collection f'r thee:" << endl
          << endl
          << "Weapons (with bonus):" << endl;
 
@@ -151,15 +149,10 @@ void setPlayer(string &name, int stat_array[3])
     validIn(choice, 1, 6, "Ent'r choice: ");
     for (int i = 0; i < 3; ++i)
     {
-        stat_array[i] = stat_array[i] + weapon_stats[choice][i];
+        player_stats[i] = player_stats[i] + weapon_stats[choice][i];
     }
 
-    cout << endl
-         << "Final Stats:" << endl
-         << "Attack = " << stat_array[0] << endl
-         << "Defense = " << stat_array[1] << endl
-         << "Max HP = " << stat_array[2] << endl
-         << endl;
+    displayStats("Final Stats:", player_stats );
 
     pause();
 
@@ -324,12 +317,7 @@ void levelup(int &level, int &experience, int player_stats[3])
             }
             }
 
-            cout << endl
-                 << "Final Stats:" << endl
-                 << "Attack = " << player_stats[0] << endl
-                 << "Defense = " << player_stats[1] << endl
-                 << "Max HP = " << player_stats[2] << endl
-                 << endl;
+            displayStats("Final Stats:", player_stats );
         }
     }
 
@@ -337,6 +325,16 @@ void levelup(int &level, int &experience, int player_stats[3])
     cout << endl
          << "========================================================================" << endl
          << endl;
+}
+
+void displayStats(string title, int player_stats[3] )
+{
+    cout << endl
+                 << title << endl
+                 << "Attack = " << player_stats[0] << endl
+                 << "Defense = " << player_stats[1] << endl
+                 << "Max HP = " << player_stats[2] << endl
+                 << endl;
 }
 
 void pause()
